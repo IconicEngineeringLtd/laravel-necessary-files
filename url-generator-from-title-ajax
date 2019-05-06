@@ -1,0 +1,46 @@
+<?php
+
+//Controller Codes
+public function ajaxrequests(Request $request)
+    {
+      if($request->req_for = "url"){
+        $string = str_replace('?', ' ', $request->title);
+        $replaced = preg_replace('/\s+/u', '-', trim($string));
+        return $replaced;
+      }
+    }
+
+//blade
+<form action="{{route('admin_insert_category')}}" method="post">
+          @csrf
+          <div class="form-group">
+            <label for="title">Category Name *</label>
+            <input type="text" id="title" name="title" class="form-control" placeholder="Please insert category name" autofocus required>
+          </div>
+          <div class="form-group">
+            <label for="url">Category Url</label>
+            <input id="url" name="url" class="form-control" value="" placeholder="Please insert category name" readonly required>
+          </div>
+          <button type="submit" class="btn bg-black text-white">Publish</button>
+        </form>
+        <script>
+          $(document).ready(function(){
+          	$('#title').keyup(function() {
+          		var title = $(this).val();
+              var req_for = 'url';
+          		$.ajaxSetup({
+          			headers: {
+          				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          			}
+          		});
+          		$.ajax({
+          			type:'POST',
+          			url:'/ajaxrequests',
+          			data: {req_for: req_for, title: title},
+          			success: function (data) {
+          				$( "#url" ).val(data);
+          			}
+          		});
+          	});
+          });
+        </script>
