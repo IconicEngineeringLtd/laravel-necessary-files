@@ -44,3 +44,9 @@ public function ajaxrequests(Request $request)
     });
   });
 </script>
+
+//Controller code for rename file name
+$today = date('d-m-y');
+$originalFileName = $request->file('featured_image')->getClientOriginalName();
+$originalName = 'ainbidhi-'.str_replace(' ', '-', $originalFileName);
+$image_path = $request->file('featured_image')->storeAs("images/posts/$category->url/$today", "$originalName");
